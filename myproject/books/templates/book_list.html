@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Book Manager</a>
+    <div>
+      <a href="{% url 'book-add' %}" class="btn btn-success me-2">Add Book</a>
+      <button type="button" class="btn btn-info me-2" data-bs-toggle="modal" data-bs-target="#chatbotModal">
+        Chat with Bot
+      </button>
+      <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Login</a>
+      <a href="{% url 'enquiry' %}" class="btn btn-outline-light">Enquiry</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h1 class="mb-4">Book List</h1>
+  <input class="form-control mb-3" id="bookSearch" type="text" placeholder="Search books...">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Published Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in object_list %}
+        <tr>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.published_date }}</td>
+          <td>
+            <a href="{% url 'book-edit' book.pk %}" class="btn btn-sm btn-warning">Edit</a>
+            <a href="{% url 'book-delete' book.pk %}" class="btn btn-sm btn-danger">Delete</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Chatbot Modal -->
+<div class="modal fade" id="chatbotModal" tabindex="-1" aria-labelledby="chatbotModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="chatbotModalLabel">Chatbot</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <iframe src="{% url 'chatbot' %}" width="100%" height="350" style="border:none;"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.getElementById('bookSearch').addEventListener('keyup', function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll('table tbody tr');
+    rows.forEach(row => {
+      let text = row.textContent.toLowerCase();
+      row.style.display = text.includes(filter) ? '' : 'none';
+    });
+  });
+</script>
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-success">{{ message }}</div>
+  {% endfor %}
+{% endif %} 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
