@@ -44,6 +44,7 @@ def chatbot_view(request):
     return render(request, "chatbot.html", {"response": response_text})
 
 from .forms import EnquiryForm
+from .forms import BookForm 
 def enquiry_view(request):
     submitted = False
     if request.method == "POST":
@@ -64,3 +65,13 @@ def register_view(request):
     else:
         form = RegisterForm()
     return render(request, 'registration/register.html', {'form': form})
+
+def add_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('book_list')
+    else:
+        form = BookForm()
+    return render(request, 'add_book.html', {'form': form})

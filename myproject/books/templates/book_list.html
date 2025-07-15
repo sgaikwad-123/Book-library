@@ -35,6 +35,13 @@
     <tbody>
       {% for book in object_list %}
         <tr>
+            <td>
+        {% if book.front_page %}
+          <img src="{{ book.front_page.url }}" alt="Cover" style="width:60px; height:auto;">
+        {% else %}
+          <span>No Image</span>
+        {% endif %}
+      </td>
           <td>{{ book.title }}</td>
           <td>{{ book.author }}</td>
           <td>{{ book.published_date }}</td>
